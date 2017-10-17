@@ -93,12 +93,12 @@ class App extends Component {
                 if (this.state.track === i) {
                   return(
                     <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
-                      <ReactPlayer width={'100%'} onEnded={() => this.onEnded(i)} onStart={() => this.start(i)} onProgress={({ played }) => this.onProgress(i, played)} url={url} controls playing={this.state.track === i ? true : false} />
+                      <ReactPlayer fileConfig={{ attributes: { autoPlay: true }}} width={'100%'} onEnded={() => this.onEnded(i)} onStart={() => this.start(i)} onProgress={({ played }) => this.onProgress(i, played)} url={url} controls playing={this.state.track === i ? true : false} />
                     </div>
                   )
                 } else {
                   return(
-                    <button onClick={() => this.start(i)} style={{ cursor: "pointer", borderWidth: 0, borderColor: "transparent", backgroundColor: "transparent", display: "flex", flexDirection: "column", marginTop: 20 }}>
+                    <button onClick={() => this.start(i)} style={{ cursor: "pointer", borderWidth: 0, borderColor: "transparent", backgroundColor: "transparent", display: "flex", flexDirection: "column", margin: 0, marginLeft: -5, marginTop: 20 }}>
                       <h3 style={{ textAlign: "left", margin: 0, marginBottom: 5, marginTop: 5 }}>{title}</h3>
                       <div style={{ display: "flex" }}>
                         <p style={{ textAlign: "left", margin: 0 }}>{url}</p>
