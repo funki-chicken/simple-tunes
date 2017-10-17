@@ -123,7 +123,7 @@ class App extends Component {
     return (
       <div style={{ display: "flex", flexDirection: "column", padding: 10, paddingTop: 40 }}>
         <div style={{ display: "flex", justifyContent: "space-between", position: "fixed", top: 0, left: 0, backgroundColor: "white", width: "100%", borderWidth: 0, borderBottomWidth: 1, borderColor: "rgba(0, 0, 0, .1)", borderStyle: "solid", boxShadow: "3px 3px 4px rgba(0, 0, 0, .1)" }}>
-          <div style={{ display: "flex", margin: 10 }}>
+          <div style={{ display: "flex", margin: 10, marginLeft: 20 }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? unselectedTabColor : selectedTabColor })} onClick={() => this.stateLoader('hot')}>
                 <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -139,7 +139,7 @@ class App extends Component {
               </button>
             </div>
           </div>
-          <div style={{ display: "flex", margin: 10 }}>
+          <div style={{ display: "flex", margin: 10, marginRight: 20 }}>
             <button onClick={() => this.start(this.state.track - 1)} style={Object.assign({}, buttonStandard(), { color: "white", borderWidth: 0,backgroundColor: leftColor })}>
               <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
                 <Backwards size={15} />
