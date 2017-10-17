@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
+import Forwards from 'react-icons/lib/md/arrow-forward';
+import Backwards from 'react-icons/lib/md/arrow-back';
 
 const openInTab = (url) => {
   var win = window.open(url, '_blank');
@@ -20,14 +22,25 @@ const buttonStandard = () => {
   return {
     cursor: "pointer",
     margin: 0,
-    padding: 5, paddingLeft: 15, paddingRight: 15,
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    height: 30, width: 70,
     backgroundColor: "white",
     outline: "none",
-    borderWidth: 1, borderColor: "rgba(0, 0, 0, .2)", borderStyle: "solid",
-    borderRadius: 2
+    borderWidth: 0,
+    borderRadius: 2,
+    color: "white"
   }
 };
-
+const circleButtonStandard = () => {
+  return {
+    cursor: "pointer",
+    margin: 0,
+    height: 50, width: 50,
+    backgroundColor: "white",
+    borderWidth: 1, borderColor: "rgba(0, 0, 0, .2)", borderStyle: "solid",
+    borderRadius: 25
+  }
+};
 class App extends Component {
   constructor(props) {
     super(props);
@@ -36,44 +49,96 @@ class App extends Component {
       listkey: 'hot',
       track: 0,
       time: 0,
-      links: [],
-      found: {}
+      links: []
     }
   }
   componentDidMount() {
-    fetchLinks(this.state.listkey)
-      .then((links) => this.setState({ loading: false, links }))
-      .catch(err => {
-        this.setState({ loading: false });
-      })
+    const state = this.stateCache();
+    if (state) {
+      this.setState(state)
+    } else {
+      this.stateLoader('hot')
+    }
+    this.handleKeyboardEvents()
   }
-  changeList(keyword) {
+  handleKeyboardEvents() {
+    document.addEventListener('keydown', (event) => {
+      const keyName = event.key;
+      if (keyName === 'Control') {
+        return;
+      }
+      if (keyName === 'ArrowRight') {
+        this.start(this.state.track + 1)
+        return
+      }
+      if (keyName === 'ArrowLeft') {
+        this.start(this.state.track - 1)
+        return
+      }
+    }, false);
+  }
+  stateCache() {
+    let cachedStateString = window.localStorage.getItem('player-state');
+    let cachedState = cachedStateString ? JSON.parse(cachedStateString) : null;
+    let shouldFetch = false;
+    if (!cachedState) {
+      shouldFetch = true
+    }
+    if (cachedState && (new Date(cachedState.timestamp).getTime() < (new Date().getTime() - 3600000000000))) {
+      shouldFetch = true
+    }
+    if (!shouldFetch) {
+      return cachedState.state
+    } else {
+      return null
+    }
+  }
+  stateLoader(keyword) {
+    window.scrollTo(0, 0);
     this.setState({ loading: true, links: [], time: 0, track: 0, listkey: keyword }, () => {
       fetchLinks(keyword)
         .then(links => this.setState({ loading: false, links }))
-        .catch(err => {
-          this.setState({ loading: false });
-        })
+        .catch(err => this.setState({ loading: false }))
     })
   }
   onProgress(index, playedTime) {
-    let found = this.state.found;
-    found[String(index)] = false;
-    this.setState({ time: playedTime, found })
+    this.setState({ time: playedTime }, () => this.cacheState())
+  }
+  cacheState() {
+    window.localStorage.setItem('player-state', JSON.stringify({ timestamp: new Date().toString(), state: this.state }))
   }
   onEnded(lastIndex) {
     const track = this.state.track;
     this.start(track + 1)
   }
   start(startIndex) {
+    const saveTrackIndex = this.state.track;
     this.setState({ track: startIndex, time: 0 })
   }
   render() {
+    const leftColor = 'rgb(33,150,243)';
+    const rightColor = 'rgb(33,150,243)';
+    const unselectedTabColor = 'rgb(227,242,253)';
+    const selectedTabColor = 'rgb(33,150,243)';
     return (
-      <div style={{ display: "flex", flexDirection: "column", padding: 10 }}>
-        <div style={{ display: "flex" }}>
-          <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'hot' ? 'rgba(0, 0, 0, .12)' : "white" })} onClick={() => this.changeList('hot')}>Hot</button>
-          <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? 'rgba(0, 0, 0, .12)' : "white" })} onClick={() => this.changeList('top')}>Top</button>
+      <div style={{ display: "flex", flexDirection: "column", padding: 10, paddingTop: 40 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", position: "fixed", top: 0, left: 0, backgroundColor: "white", width: "100%", borderWidth: 0, borderBottomWidth: 1, borderColor: "rgba(0, 0, 0, .1)", borderStyle: "solid", boxShadow: "3px 3px 4px rgba(0, 0, 0, .1)" }}>
+          <div style={{ display: "flex", margin: 10 }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? unselectedTabColor : selectedTabColor })} onClick={() => this.stateLoader('hot')}>Hot</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor })} onClick={() => this.stateLoader('top')}>Top</button>
+            </div>
+          </div>
+          <div style={{ display: "flex", margin: 10 }}>
+            <button onClick={() => this.start(this.state.track - 1)} style={Object.assign({}, buttonStandard(), { color: "white", borderWidth: 0,backgroundColor: leftColor })}>
+              <Backwards size={15} />
+            </button>
+            <button onClick={() => this.start(this.state.track + 1)} style={Object.assign({}, buttonStandard(), { marginLeft: 15, color: "white", borderWidth: 0,backgroundColor: rightColor })}>
+              <Forwards size={15} />
+            </button>
+          </div>
         </div>
         {
           this.state.loading ?
@@ -93,7 +158,15 @@ class App extends Component {
                 if (this.state.track === i) {
                   return(
                     <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
-                      <ReactPlayer fileConfig={{ attributes: { autoPlay: true }}} width={'100%'} onEnded={() => this.onEnded(i)} onStart={() => this.start(i)} onProgress={({ played }) => this.onProgress(i, played)} url={url} controls playing={this.state.track === i ? true : false} />
+                      <ReactPlayer
+                        fileConfig={{ attributes: { autoPlay: true }}}
+                        width={'100%'}
+                        height={window.innerHeight - 200}
+                        onEnded={() => this.onEnded(i)} onStart={() => this.start(i)} onProgress={({ playedSeconds }) => this.onProgress(i, playedSeconds)}
+                        url={url}
+                        controls
+                        playing={this.state.track === i ? true : false}
+                        youtubeConfig={{ playerVars: { start: Math.round(this.state.time), autoplay: 1 } }}/>
                     </div>
                   )
                 } else {
