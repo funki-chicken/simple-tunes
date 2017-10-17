@@ -23,7 +23,7 @@ const buttonStandard = () => {
     cursor: "pointer",
     margin: 0,
     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-    height: 30, width: 70,
+    height: 30, width: 60,
     backgroundColor: "white",
     outline: "none",
     borderWidth: 0,
@@ -125,18 +125,30 @@ class App extends Component {
         <div style={{ display: "flex", justifyContent: "space-between", position: "fixed", top: 0, left: 0, backgroundColor: "white", width: "100%", borderWidth: 0, borderBottomWidth: 1, borderColor: "rgba(0, 0, 0, .1)", borderStyle: "solid", boxShadow: "3px 3px 4px rgba(0, 0, 0, .1)" }}>
           <div style={{ display: "flex", margin: 10 }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? unselectedTabColor : selectedTabColor })} onClick={() => this.stateLoader('hot')}>Hot</button>
+              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? unselectedTabColor : selectedTabColor })} onClick={() => this.stateLoader('hot')}>
+                <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
+                  Hot
+                </div>
+              </button>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor })} onClick={() => this.stateLoader('top')}>Top</button>
+              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor })} onClick={() => this.stateLoader('top')}>
+                <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
+                  Hot
+                </div>
+              </button>
             </div>
           </div>
           <div style={{ display: "flex", margin: 10 }}>
             <button onClick={() => this.start(this.state.track - 1)} style={Object.assign({}, buttonStandard(), { color: "white", borderWidth: 0,backgroundColor: leftColor })}>
-              <Backwards size={15} />
+              <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <Backwards size={15} />
+              </div>
             </button>
             <button onClick={() => this.start(this.state.track + 1)} style={Object.assign({}, buttonStandard(), { marginLeft: 15, color: "white", borderWidth: 0,backgroundColor: rightColor })}>
-              <Forwards size={15} />
+              <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <Forwards size={15} />
+              </div>
             </button>
           </div>
         </div>
