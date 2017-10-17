@@ -132,9 +132,9 @@ class App extends Component {
               </button>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'hot' ? selectedTabColor : unselectedTabColor })} onClick={() => this.stateLoader('top')}>
+              <button style={Object.assign({}, buttonStandard(), { marginRight: 10, backgroundColor: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor, color: this.state.listkey === 'top' ? selectedTabColor : unselectedTabColor })} onClick={() => this.stateLoader('top')}>
                 <div style={{ display: "flex", flex: 1, alignItems: "center", justifyContent: "center" }}>
-                  Hot
+                  Top
                 </div>
               </button>
             </div>
